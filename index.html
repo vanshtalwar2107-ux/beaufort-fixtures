@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEAUFORT 3.0 — Badminton Tournament</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6F2E6;
+    --paper:#FFFFFF;
+    --ink:#16241C;
+    --court-dark:#0E3B2C;
+    --court:#155840;
+    --court-light:#1F6E50;
+    --gold:#D8A13B;
+    --gold-light:#F0D9AA;
+    --win:#2F8F46;
+    --win-bg:#E5F5E8;
+    --win-border:#2F8F46;
+    --loss:#B23B2E;
+    --loss-bg:#F8EAE7;
+    --line-col:#DED6C0;
+    --muted:#6E6558;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Bebas Neue',sans-serif; letter-spacing:0.02em;}
+  .mono{font-family:'Roboto Mono',monospace;}
+
+  /* ---------- NAV ---------- */
+  .topnav{
+    position:sticky; top:0; z-index:50;
+    background:var(--court-dark);
+    border-bottom:3px solid var(--gold);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 28px;
+  }
+  .topnav .brand{
+    color:var(--cream); font-family:'Bebas Neue',sans-serif;
+    font-size:26px; letter-spacing:0.06em; cursor:pointer;
+    display:flex; align-items:center; gap:10px;
+  }
+  .topnav .brand svg{flex-shrink:0;}
+  .back-btn{
+    display:none;
+    background:transparent; border:1.5px solid var(--gold-light);
+    color:var(--gold-light); font-family:'Inter'; font-weight:600; font-size:13px;
+    padding:8px 16px; border-radius:20px; cursor:pointer;
+    letter-spacing:0.03em;
+  }
+  .back-btn:hover{background:rgba(216,161,59,0.15);}
+  .back-btn.show{display:inline-block;}
+
+  /* ---------- HOME ---------- */
+  #view-home{}
+  .banner{
+    position:relative;
+    background:linear-gradient(180deg,var(--court-dark) 0%, var(--court) 100%);
+    color:var(--cream);
+    padding:90px 24px 70px;
+    text-align:center;
+    overflow:hidden;
+  }
+  .banner::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.045) 0px, rgba(255,255,255,0.045) 1px, transparent 1px, transparent 90px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.045) 0px, rgba(255,255,255,0.045) 1px, transparent 1px, transparent 90px);
+    pointer-events:none;
+  }
+  .banner .eyebrow{
+    position:relative;
+    font-family:'Roboto Mono',monospace; font-size:13px; letter-spacing:0.25em;
+    color:var(--gold-light); text-transform:uppercase; margin-bottom:18px;
+  }
+  .banner h1{
+    position:relative;
+    font-size:clamp(48px,9vw,104px); line-height:0.95; margin:0 0 14px;
+  }
+  .banner p.sub{
+    position:relative;
+    font-size:17px; color:rgba(246,242,230,0.8); max-width:520px; margin:0 auto 34px;
+    font-family:'Inter'; font-weight:400;
+  }
+  .banner .meta{
+    position:relative;
+    display:flex; gap:28px; justify-content:center; flex-wrap:wrap;
+    font-family:'Roboto Mono',monospace; font-size:13px; color:var(--gold-light);
+  }
+  .banner .meta span{display:flex; align-items:center; gap:8px;}
+  .scroll-cue{
+    position:relative; margin-top:56px;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    color:rgba(246,242,230,0.55); font-size:12px; font-family:'Roboto Mono';
+    letter-spacing:0.15em; text-transform:uppercase;
+    animation:bob 2s ease-in-out infinite;
+  }
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+  .categories-section{
+    max-width:1080px; margin:0 auto; padding:64px 24px 90px;
+  }
+  .categories-section .section-label{
+    font-family:'Roboto Mono'; font-size:12px; letter-spacing:0.2em; color:var(--muted);
+    text-transform:uppercase; margin-bottom:8px;
+  }
+  .categories-section h2{
+    font-size:38px; margin:0 0 40px; color:var(--court-dark);
+  }
+  .cat-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:18px;
+  }
+  .cat-card{
+    background:var(--paper);
+    border:1px solid var(--line-col);
+    border-radius:14px;
+    padding:26px 22px;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    text-align:left;
+  }
+  .cat-card:hover{
+    transform:translateY(-4px);
+    border-color:var(--gold);
+    box-shadow:0 12px 28px rgba(14,59,44,0.12);
+  }
+  .cat-card .tag{
+    font-family:'Roboto Mono'; font-size:11px; color:var(--gold); letter-spacing:0.12em;
+    margin-bottom:14px; display:block;
+  }
+  .cat-card h3{
+    font-size:26px; margin:0 0 8px; color:var(--court-dark); line-height:1;
+  }
+  .cat-card .draw-size{
+    font-size:13px; color:var(--muted); font-family:'Inter';
+  }
+  .cat-card .arrow{
+    position:absolute; right:20px; bottom:20px; color:var(--gold);
+    font-size:20px; transition:transform 0.18s ease;
+  }
+  .cat-card:hover .arrow{transform:translateX(4px);}
+
+  /* ---------- BRACKET VIEW ---------- */
+  #view-bracket{display:none;}
+  .bracket-header{
+    max-width:1200px; margin:0 auto; padding:44px 24px 8px;
+  }
+  .bracket-header .section-label{
+    font-family:'Roboto Mono'; font-size:12px; letter-spacing:0.2em; color:var(--muted);
+    text-transform:uppercase; margin-bottom:6px;
+  }
+  .bracket-header h2{font-size:40px; margin:0 0 6px; color:var(--court-dark);}
+  .bracket-header .status{font-size:14px; color:var(--muted); margin-bottom:18px;}
+
+  .cat-tabs{
+    display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;
+  }
+  .cat-tab{
+    font-family:'Inter'; font-weight:600; font-size:13px;
+    padding:9px 16px; border-radius:20px; border:1px solid var(--line-col);
+    background:var(--paper); color:var(--muted); cursor:pointer;
+  }
+  .cat-tab.active{
+    background:var(--court-dark); color:var(--cream); border-color:var(--court-dark);
+  }
+
+  .legend{
+    display:flex; gap:22px; align-items:center; padding:0 24px 20px;
+    max-width:1200px; margin:0 auto; font-size:12.5px; color:var(--muted);
+    flex-wrap:wrap;
+  }
+  .legend .dot{width:10px; height:10px; border-radius:3px; display:inline-block; margin-right:6px; vertical-align:-1px;}
+
+  .bracket-wrap{
+    max-width:1200px; margin:0 auto 100px; padding:0 24px;
+  }
+  .bracket-scroll{
+    overflow-x:auto; padding:20px 4px 40px;
+    position:relative;
+  }
+  .rounds{
+    display:flex; gap:70px; position:relative; min-width:max-content;
+  }
+  .round{
+    display:flex; flex-direction:column; justify-content:space-around;
+    min-width:220px; position:relative; z-index:2;
+  }
+  .round-title{
+    font-family:'Roboto Mono'; font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--muted); text-align:center; margin:0 0 18px;
+  }
+  .matches{display:flex; flex-direction:column; justify-content:space-around; flex:1; gap:22px;}
+
+  .match{
+    background:var(--paper); border:1px solid var(--line-col); border-radius:10px;
+    overflow:hidden; box-shadow:0 1px 2px rgba(14,59,44,0.04);
+  }
+  .team{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 12px; font-size:13.5px; font-weight:500; gap:10px;
+    border-bottom:1px solid var(--line-col);
+  }
+  .team:last-child{border-bottom:none;}
+  .team .name{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .team .score{font-family:'Roboto Mono'; font-size:12.5px; font-weight:700; flex-shrink:0;}
+  .team.winner{background:var(--win-bg); color:var(--win); font-weight:700;}
+  .team.winner .score{color:var(--win);}
+  .team.loser{background:var(--loss-bg); color:var(--loss); text-decoration:line-through; text-decoration-color:rgba(178,59,46,0.45); font-weight:500;}
+  .team.loser .score{color:var(--loss);}
+  .team.pending{color:var(--ink);}
+  .match-time{
+    font-family:'Roboto Mono'; font-size:10.5px; color:var(--muted); text-align:center;
+    padding:5px 8px; background:#FAF8F2; letter-spacing:0.04em;
+  }
+
+  .champion-round{justify-content:center; align-items:center; min-width:200px;}
+  .champion-box{
+    background:var(--court-dark); border:2px solid var(--gold);
+    border-radius:12px; padding:22px 20px; text-align:center; min-width:190px;
+  }
+  .champion-box .cup{color:var(--gold); font-size:22px; margin-bottom:8px;}
+  .champion-box .name{color:var(--cream); font-weight:700; font-size:15px; margin-bottom:4px;}
+  .champion-box .label{color:var(--gold-light); font-family:'Roboto Mono'; font-size:10px; letter-spacing:0.14em; text-transform:uppercase;}
+
+  svg.connectors{position:absolute; top:0; left:0; z-index:1; overflow:visible;}
+
+  footer{
+    text-align:center; padding:34px 24px 50px; color:var(--muted); font-size:12.5px;
+    border-top:1px solid var(--line-col);
+  }
+
+  @media (max-width:640px){
+    .banner{padding:64px 18px 50px;}
+    .banner h1{font-size:52px;}
+    .categories-section{padding:44px 18px 60px;}
+    .cat-grid{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="brand" onclick="goHome()">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="4" stroke="#D8A13B" stroke-width="1.6"/><path d="M12 11L6 21M12 11L18 21M6 21L9 19M18 21L15 19" stroke="#D8A13B" stroke-width="1.6" stroke-linecap="round"/></svg>
+    BEAUFORT 3.0
+  </div>
+  <button class="back-btn" id="backBtn" onclick="goHome()">&larr; All categories</button>
+</nav>
+
+<!-- ============ HOME VIEW ============ -->
+<div id="view-home">
+  <section class="banner">
+    <div class="eyebrow">23 and 26 August 2026 &middot; SAI Sports Complex</div>
+    <h1>BEAUFORT 3.0<br>2026</h1>
+    <p class="sub">Presented by NFSU Sports Club.</p>
+    <div class="meta">
+      <span>&#9679; 5 categories</span>
+      <span>&#9679; Live fixtures below</span>
+    </div>
+    <div class="scroll-cue">Scroll for categories &#8595;</div>
+  </section>
+
+  <section class="categories-section">
+    <div class="section-label">Draws</div>
+    <h2>Pick a category</h2>
+    <div class="cat-grid" id="catGrid"></div>
+  </section>
+
+  <footer>Fixtures update as matches are played. Tap a category to view its bracket.</footer>
+</div>
+
+<!-- ============ BRACKET VIEW ============ -->
+<div id="view-bracket">
+  <div class="bracket-header">
+    <div class="section-label">Draw</div>
+    <h2 id="bracketTitle">—</h2>
+    <div class="status" id="bracketStatus">—</div>
+    <div class="cat-tabs" id="catTabs"></div>
+  </div>
+  <div class="legend">
+    <span><span class="dot" style="background:var(--win)"></span>Winner</span>
+    <span><span class="dot" style="background:var(--loss)"></span>Eliminated</span>
+    <span><span class="dot" style="background:var(--line-col)"></span>Yet to be played</span>
+  </div>
+  <div class="bracket-wrap">
+    <div class="bracket-scroll" id="bracketScroll">
+      <svg class="connectors" id="connectorSvg"></svg>
+      <div class="rounds" id="roundsContainer"></div>
+    </div>
+  </div>
+  <footer>BEAUFORT 3.0 2026 &middot; Fixtures &amp; Draws</footer>
+</div>
+
+<script>
+/* =====================================================================
+   HOW TO UPDATE FIXTURES  (no coding experience needed)
+   =====================================================================
+   Everything below in TOURNAMENT_DATA is what shows up on the site.
+   To update a match:
+     1. Find the category (ms, md, ws, wd, xd) and the round you want.
+     2. Each match looks like this:
+
+          { team1: "Player A", team2: "Player B",
+            score1: "", score2: "", winner: null, time: "Sat 10:00 AM" }
+
+     3. Fill in real names in team1 / team2.
+     4. After the match is played, fill in the scores as text, e.g.
+          score1: "21-18, 21-15", score2: "18-21, 15-21"
+     5. Set "winner" to "team1" or "team2" depending on who won.
+        Leave it as null if the match hasn't been played yet.
+     6. To send a winner into the next round, open the NEXT round and
+        replace "TBD" with that same player/team name in the matching
+        slot (matches pair up top-to-bottom, two feed into one).
+     7. Save the file and refresh the page in your browser — that's it.
+
+   You can also rename categories, change the banner text/date/venue
+   near the top of the HTML, or add more rounds by copying the pattern
+   of an existing round array.
+   ===================================================================== */
+
+const TOURNAMENT_DATA = {
+  ms: {
+    label: "Men's Singles",
+    tag: "Singles",
+    drawSize: "8 players",
+    rounds: [
+      {
+        title: "Quarterfinal",
+        matches: [
+          { team1:"Rohit Kadam", team2:"Suyash Patil", score1:"21-15, 21-18", score2:"", winner:"team1", time:"Sat 9:00 AM" },
+          { team1:"Aman Deshmukh", team2:"Kunal Bhosale", score1:"", score2:"", winner:null, time:"Sat 9:40 AM" },
+          { team1:"Yash Pawar", team2:"Rahul Shinde", score1:"19-21, 21-17, 21-19", score2:"", winner:"team1", time:"Sat 10:20 AM" },
+          { team1:"Om Jadhav", team2:"Sahil More", score1:"", score2:"", winner:null, time:"Sat 11:00 AM" }
+        ]
+      },
+      {
+        title: "Semifinal",
+        matches: [
+          { team1:"Rohit Kadam", team2:"TBD", score1:"", score2:"", winner:null, time:"Sat 3:00 PM" },
+          { team1:"Yash Pawar", team2:"TBD", score1:"", score2:"", winner:null, time:"Sat 3:40 PM" }
+        ]
+      },
+      {
+        title: "Final",
+        matches: [
+          { team1:"TBD", team2:"TBD", score1:"", score2:"", winner:null, time:"Sun 5:00 PM" }
+        ]
+      }
+    ]
+  },
+  md: {
+    label: "Men's Doubles",
+    tag: "Doubles",
+    drawSize: "4 pairs",
+    rounds: [
+      {
+        title: "Semifinal",
+        matches: [
+          { team1:"Rohit K. / Om J.", team2:"Aman D. / Kunal B.", score1:"21-16, 21-19", score2:"", winner:"team1", time:"Sat 12:00 PM" },
+          { team1:"Yash P. / Sahil M.", team2:"Rahul S. / Suyash P.", score1:"", score2:"", winner:null, time:"Sat 12:40 PM" }
+        ]
+      },
+      {
+        title: "Final",
+        matches: [
+          { team1:"Rohit K. / Om J.", team2:"TBD", score1:"", score2:"", winner:null, time:"Sun 4:00 PM" }
+        ]
+      }
+    ]
+  },
+  ws: {
+    label: "Women's Singles",
+    tag: "Singles",
+    drawSize: "8 players",
+    rounds: [
+      {
+        title: "Quarterfinal",
+        matches: [
+          { team1:"Sneha Wagh", team2:"Priya Chavan", score1:"21-14, 21-12", score2:"", winner:"team1", time:"Sat 9:00 AM" },
+          { team1:"Anjali Mane", team2:"Pooja Bhoir", score1:"18-21, 21-19, 21-16", score2:"", winner:"team1", time:"Sat 9:40 AM" },
+          { team1:"Neha Salunkhe", team2:"Kavita More", score1:"", score2:"", winner:null, time:"Sat 10:20 AM" },
+          { team1:"Riya Kulkarni", team2:"Simran Gaikwad", score1:"", score2:"", winner:null, time:"Sat 11:00 AM" }
+        ]
+      },
+      {
+        title: "Semifinal",
+        matches: [
+          { team1:"Sneha Wagh", team2:"Anjali Mane", score1:"", score2:"", winner:null, time:"Sat 4:00 PM" },
+          { team1:"TBD", team2:"TBD", score1:"", score2:"", winner:null, time:"Sat 4:40 PM" }
+        ]
+      },
+      {
+        title: "Final",
+        matches: [
+          { team1:"TBD", team2:"TBD", score1:"", score2:"", winner:null, time:"Sun 5:40 PM" }
+        ]
+      }
+    ]
+  },
+  wd: {
+    label: "Women's Doubles",
+    tag: "Doubles",
+    drawSize: "4 pairs",
+    rounds: [
+      {
+        title: "Semifinal",
+        matches: [
+          { team1:"Sneha W. / Riya K.", team2:"Anjali M. / Neha S.", score1:"", score2:"", winner:null, time:"Sat 1:00 PM" },
+          { team1:"Priya C. / Pooja B.", team2:"Kavita M. / Simran G.", score1:"21-19, 21-17", score2:"", winner:"team1", time:"Sat 1:40 PM" }
+        ]
+      },
+      {
+        title: "Final",
+        matches: [
+          { team1:"TBD", team2:"Priya C. / Pooja B.", score1:"", score2:"", winner:null, time:"Sun 4:40 PM" }
+        ]
+      }
+    ]
+  },
+  xd: {
+    label: "Mixed Doubles",
+    tag: "Doubles",
+    drawSize: "4 pairs",
+    rounds: [
+      {
+        title: "Semifinal",
+        matches: [
+          { team1:"Rohit K. / Sneha W.", team2:"Aman D. / Anjali M.", score1:"", score2:"", winner:null, time:"Sat 2:00 PM" },
+          { team1:"Yash P. / Priya C.", team2:"Om J. / Neha S.", score1:"21-18, 19-21, 21-16", score2:"", winner:"team1", time:"Sat 2:40 PM" }
+        ]
+      },
+      {
+        title: "Final",
+        matches: [
+          { team1:"TBD", team2:"Yash P. / Priya C.", score1:"", score2:"", winner:null, time:"Sun 6:20 PM" }
+        ]
+      }
+    ]
+  }
+};
+
+const CATEGORY_ORDER = ["ms","md","ws","wd","xd"];
+
+function catStatus(cat){
+  const rounds = TOURNAMENT_DATA[cat].rounds;
+  const finalRound = rounds[rounds.length-1];
+  const champ = finalRound.matches[0];
+  if(champ.winner) return "Champion crowned";
+  const anyPlayed = rounds.some(r=>r.matches.some(m=>m.winner));
+  return anyPlayed ? "In progress" : "Yet to begin";
+}
+
+function buildHome(){
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = CATEGORY_ORDER.map(key=>{
+    const c = TOURNAMENT_DATA[key];
+    return `<div class="cat-card" onclick="openBracket('${key}')">
+      <span class="tag">${c.tag}</span>
+      <h3>${c.label}</h3>
+      <div class="draw-size">${c.drawSize}</div>
+      <span class="arrow">&rarr;</span>
+    </div>`;
+  }).join('');
+}
+
+function buildTabs(activeKey){
+  const tabs = document.getElementById('catTabs');
+  tabs.innerHTML = CATEGORY_ORDER.map(key=>{
+    const c = TOURNAMENT_DATA[key];
+    return `<button class="cat-tab ${key===activeKey?'active':''}" onclick="openBracket('${key}')">${c.label}</button>`;
+  }).join('');
+}
+
+function teamClass(m, which){
+  if(m.winner===null) return 'pending';
+  return m.winner===which ? 'winner' : 'loser';
+}
+
+function buildBracket(catKey){
+  const data = TOURNAMENT_DATA[catKey];
+  document.getElementById('bracketTitle').textContent = data.label;
+  document.getElementById('bracketStatus').textContent = `${data.drawSize} &middot; ${catStatus(catKey)}`.replace('&middot;','\u00B7');
+  buildTabs(catKey);
+
+  const container = document.getElementById('roundsContainer');
+  let html = '';
+  data.rounds.forEach((round, rIdx)=>{
+    html += `<div class="round" data-round="${rIdx}"><div class="round-title">${round.title}</div><div class="matches">`;
+    round.matches.forEach((m, mIdx)=>{
+      html += `<div class="match" id="m-${rIdx}-${mIdx}">
+        <div class="match-time">${m.time || ''}</div>
+        <div class="team ${teamClass(m,'team1')}">
+          <span class="name">${m.team1}</span>
+          <span class="score mono">${m.score1||''}</span>
+        </div>
+        <div class="team ${teamClass(m,'team2')}">
+          <span class="name">${m.team2}</span>
+          <span class="score mono">${m.score2||''}</span>
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  const finalRound = data.rounds[data.rounds.length-1];
+  const champMatch = finalRound.matches[0];
+  const champName = champMatch.winner ? (champMatch.winner==='team1'?champMatch.team1:champMatch.team2) : 'TBD';
+  html += `<div class="round champion-round" data-round="champion">
+    <div class="round-title">Champion</div>
+    <div class="champion-box" id="champion-box">
+      <div class="cup">&#127942;</div>
+      <div class="name">${champName}</div>
+      <div class="label">${data.label}</div>
+    </div>
+  </div>`;
+
+  container.innerHTML = html;
+  requestAnimationFrame(()=>drawConnectors(data));
+}
+
+function drawConnectors(data){
+  const scrollEl = document.getElementById('bracketScroll');
+  const svg = document.getElementById('connectorSvg');
+  const scrollRect = scrollEl.getBoundingClientRect();
+  const roundsEl = document.getElementById('roundsContainer');
+  const totalW = roundsEl.scrollWidth;
+  const totalH = roundsEl.scrollHeight;
+  svg.setAttribute('width', totalW);
+  svg.setAttribute('height', totalH);
+  svg.setAttribute('viewBox', `0 0 ${totalW} ${totalH}`);
+  svg.innerHTML = '';
+
+  function center(el){
+    const r = el.getBoundingClientRect();
+    return { x: r.left - scrollRect.left + scrollEl.scrollLeft, y: r.top - scrollRect.top + r.height/2 + scrollEl.scrollTop, right: r.right - scrollRect.left + scrollEl.scrollLeft, w: r.width };
+  }
+
+  const numRounds = data.rounds.length;
+  for(let r=0; r<numRounds; r++){
+    const matches = data.rounds[r].matches;
+    matches.forEach((m, i)=>{
+      const srcEl = document.getElementById(`m-${r}-${i}`);
+      if(!srcEl) return;
+      const src = center(srcEl);
+      let targetEl, decided = !!m.winner;
+      if(r < numRounds-1){
+        const targetIdx = Math.floor(i/2);
+        targetEl = document.getElementById(`m-${r+1}-${targetIdx}`);
+      } else {
+        targetEl = document.getElementById('champion-box');
+      }
+      if(!targetEl) return;
+      const tgt = center(targetEl);
+      const midX = src.right + (tgt.x - src.right)/2;
+      const path = `M ${src.right} ${src.y} H ${midX} V ${tgt.y} H ${tgt.x}`;
+      const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+      p.setAttribute('d', path);
+      p.setAttribute('fill','none');
+      p.setAttribute('stroke', decided ? '#D8A13B' : '#DED6C0');
+      p.setAttribute('stroke-width', decided ? '2' : '1.5');
+      svg.appendChild(p);
+    });
+  }
+}
+
+function openBracket(catKey){
+  document.getElementById('view-home').style.display='none';
+  document.getElementById('view-bracket').style.display='block';
+  document.getElementById('backBtn').classList.add('show');
+  window.scrollTo({top:0, behavior:'instant'});
+  buildBracket(catKey);
+  window.location.hash = catKey;
+}
+
+function goHome(){
+  document.getElementById('view-bracket').style.display='none';
+  document.getElementById('view-home').style.display='block';
+  document.getElementById('backBtn').classList.remove('show');
+  window.scrollTo({top:0, behavior:'instant'});
+  window.location.hash = '';
+}
+
+window.addEventListener('resize', ()=>{
+  const hash = window.location.hash.replace('#','');
+  if(CATEGORY_ORDER.includes(hash)) drawConnectors(TOURNAMENT_DATA[hash]);
+});
+
+buildHome();
+const initialHash = window.location.hash.replace('#','');
+if(CATEGORY_ORDER.includes(initialHash)){
+  openBracket(initialHash);
+} 
+</script>
+</body>
+</html>
