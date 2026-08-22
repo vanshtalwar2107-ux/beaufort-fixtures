@@ -337,7 +337,7 @@ const TOURNAMENT_DATA = {
     drawSize: "36 players",
     rounds: [
       {
-        title: "Round of 32",
+        title: "Knockout Stage 1",
         matches: [
           { team1:"Shivam Naik", team2:"Nishank Eshwar", score1:"", score2:"1", winner:null, },
           { team1:"Padmanabh B", team2:"Maruti Murachitti", score1:"", score2:"", winner:null, },
@@ -349,25 +349,26 @@ const TOURNAMENT_DATA = {
           { team1:"Rahul kamble", team2:"Rajesh G S", score1:"", score2:"", winner:null, },
           { team1:"Tejas Bhoi", team2:"Vikash Bhadwa", score1:"", score2:"", winner:null, },
           { team1:"Vishv Ramanuj", team2:"Batana Vinay Kumar", score1:"", score2:"", winner:null, },
-          { team1:"Rajkumar Vishe", team2:"Bhaskarjyoti Musahary", score1:"", score2:"", winner:null, },
+          { team1:"Rajkumar Vishe", team2:"ranjit kolkar", score1:"", score2:"", winner:null, },
           { team1:"Steve Jerson k", team2:"Yuvraj Karan Singh", score1:"", score2:"", winner:null, },
-          { team1:"ranjit kolkar", team2:"Sandeep Kumar", score1:"", score2:"", winner:null, },
-          { team1:"Bhavik parab", team2:"Krishnanunni A M", score1:"", score2:"", winner:null, },
+          { team1:"Ayush modi", team2:"Pranay Krishna Mushan", score1:"", score2:"", winner:null, },
+          { team1:"Bhaskarjyoti Musahary", team2:"Crrishraj Umedsinh Chavda", score1:"", score2:"", winner:null, },
           { team1:"Varun Majmudar", team2:"Himul das", score1:"", score2:"", winner:null, },
+          { team1:"Bhavik parab", team2:"Krishnanunni A M", score1:"", score2:"", winner:null, },
           { team1:"Vansh Talwar", team2:"Piyush Anand", score1:"", score2:"", winner:null, }
         ]
       },
       {
-        title: "Round of 16",
+        title: "Round of 8",
         matches: [
           { team1:"TBD", team2:"TBD", score1:"", score2:"", winner:null, },
-          { team1:"Ayush modi", team2:"TBD", score1:"", score2:"", winner:null, },
-          { team1:"TBD", team2:"", score1:"", score2:"", winner:null, },
-          { team1:"Pranay Krishna Mushan", team2:"TBD", score1:"", score2:"", winner:null, },
           { team1:"TBD", team2:"TBD", score1:"", score2:"", winner:null, },
-          { team1:"Pranay Mushan", team2:"TBD", score1:"", score2:"", winner:null, },
           { team1:"TBD", team2:"TBD", score1:"", score2:"", winner:null, },
-          { team1:"Crrishraj Umedsinh Chavda", team2:"TBD", score1:"", score2:"", winner:null, }
+          { team1:"TBD", team2:"TBD", score1:"", score2:"", winner:null, },
+          { team1:"TBD", team2:"TBD", score1:"", score2:"", winner:null, },
+          { team1:"TBD", team2:"TBD", score1:"", score2:"", winner:null, },
+          { team1:"TBD", team2:"TBD", score1:"", score2:"", winner:null, },
+          { team1:"sandeep kumar", team2:"TBD", score1:"", score2:"", winner:null, },
         ]
       },
        {
@@ -487,19 +488,39 @@ const TOURNAMENT_DATA = {
   xd: {
     label: "Mixed Doubles",
     tag: "Doubles",
-    drawSize: "4 pairs",
+    drawSize: "13 pairs",
     rounds: [
+      {
+        title: "Round of 16",
+        matches: [
+          { team1:"Varun Majmudar / Shreya Vachhani", team2:"BYE", score1:"", score2:"", winner:null, },
+          { team1:"Rohit Gupta / Chhavi Chhabra", team2:"Garvita Pamecha / Ayman Shaikh", score1:"", score2:"", winner:null, },
+          { team1:"Bhaskarjyoti Musahary / Sakshi Sharma", team2:"Sandeep Kumar / Saumya Rawat", score1:"", score2:"", winner:null, },
+          { team1:"Tejas Bhoi / Yasheesha Sharma", team2:"Soram Andox / Munkhjin Terbish", score1:"", score2:"", winner:null, },
+          { team1:"Vipasha Khatri / Chandrashekhar Donagaon", team2:"Vishal Gama / Snehal Gavit", score1:"", score2:"", winner:null, },
+          { team1:"Aditi Ranjan / Vinay Kumar", team2:"Jyoti Doifode / Siddhant Dessai", score1:"", score2:"", winner:null, },
+          { team1:"Vansh Talwar / Kashish Shah", team2:"Krishnanunni A M / Partner", score1:"", score2:"", winner:null, },
+          { team1:"BYE", team2:"BYE", score1:"21-18, 19-21, 21-16", score2:"", winner:"team1", }
+        ]
+      },
+      {
+        title: "Quarterfinal",
+        matches: [
+          { team1:"Rohit K. / Sneha W.", team2:"Aman D. / Anjali M.", score1:"", score2:"", winner:null, },
+          { team1:"Yash P. / Priya C.", team2:"Om J. / Neha S.", score1:"21-18, 19-21, 21-16", score2:"", winner:"team1", }
+        ]
+      },
       {
         title: "Semifinal",
         matches: [
-          { team1:"Rohit K. / Sneha W.", team2:"Aman D. / Anjali M.", score1:"", score2:"", winner:null, time:"Sat 2:00 PM" },
-          { team1:"Yash P. / Priya C.", team2:"Om J. / Neha S.", score1:"21-18, 19-21, 21-16", score2:"", winner:"team1", time:"Sat 2:40 PM" }
+          { team1:"Rohit K. / Sneha W.", team2:"Aman D. / Anjali M.", score1:"", score2:"", winner:null, },
+          { team1:"Yash P. / Priya C.", team2:"Om J. / Neha S.", score1:"21-18, 19-21, 21-16", score2:"", winner:"team1", }
         ]
       },
       {
         title: "Final",
         matches: [
-          { team1:"TBD", team2:"Yash P. / Priya C.", score1:"", score2:"", winner:null, time:"Sun 6:20 PM" }
+          { team1:"TBD", team2:"Yash P. / Priya C.", score1:"", score2:"", winner:null, }
         ]
       }
     ]
