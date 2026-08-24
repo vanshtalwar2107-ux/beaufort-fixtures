@@ -566,7 +566,7 @@ function buildBracket(catKey){
     html += `<div class="round" data-round="${rIdx}"><div class="round-title">${round.title}</div><div class="matches">`;
     round.matches.forEach((m, mIdx)=>{
       html += `<div class="match" id="m-${rIdx}-${mIdx}">
-        <div class="match-time">${m.time || ''}</div>
+        ${m.time ? `<div class="match-time">${m.time}</div>` : ''}
         <div class="team ${teamClass(m,'team1')}">
           <span class="name">${m.team1}</span>
           <span class="score mono">${m.score1||''}</span>
