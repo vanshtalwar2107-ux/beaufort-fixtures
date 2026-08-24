@@ -224,7 +224,22 @@
     font-family:'Roboto Mono'; font-size:10.5px; color:var(--muted); text-align:center;
     padding:5px 8px; background:#FAF8F2; letter-spacing:0.04em;
   }
-
+    .live-badge{
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    font-family:'Roboto Mono',monospace; font-size:10.5px; font-weight:700;
+    color:#B23B2E; text-align:center;
+    padding:5px 8px; background:#FDEDEB; letter-spacing:0.06em;
+  }
+  .live-badge .pulse{
+    width:7px; height:7px; border-radius:50%;
+    background:#E23B2E; display:inline-block;
+    animation:pulse-dot 1.2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:0.4; transform:scale(0.8); }
+  }
+  
   .champion-round{justify-content:center; align-items:center; min-width:200px;}
   .champion-box{
     background:var(--court-dark); border:2px solid var(--gold);
@@ -343,7 +358,7 @@ const TOURNAMENT_DATA = {
           { team1:"Raj", team2:"Sanay/Maruthi", score1:"", score2:"", winner:null, },
           { team1:"Vinay", team2:"BYE", score1:"", score2:"", winner:"team1", },
           { team1:"Vansh", team2:"BYE", score1:"", score2:"", winner:"team1", },
-          { team1:"Unni", team2:"Steve", score1:"0", score2:"2", winner:"team2", },
+          { team1:"Unni", team2:"Steve", score1:"", score2:"", winner:null, },
           { team1:"Varun Majmudar", team2:"Rahul", score1:"", score2:"", winner:null, },
           { team1:"Andox", team2:"BYE", score1:"", score2:"", winner:"team1", },
           { team1:"Rohit", team2:"BYE", score1:"", score2:"", winner:"team1", },
@@ -353,7 +368,7 @@ const TOURNAMENT_DATA = {
         title: "Quarterfinals",
         matches: [
           { team1:"Sandeep", team2:"TBD", score1:"", score2:"", winner:null, },
-          { team1:"Vinay", team2:"Vansh", score1:"", score2:"", winner:null, },
+          { team1:"Vinay", team2:"Vansh", score1:"1", score2:"2", winner:"team2", },
           { team1:"Steve", team2:"TBD", score1:"", score2:"", winner:null, },
           { team1:"Andox", team2:"Rohit", score1:"", score2:"", winner:null, }
         ]
@@ -566,7 +581,7 @@ function buildBracket(catKey){
     html += `<div class="round" data-round="${rIdx}"><div class="round-title">${round.title}</div><div class="matches">`;
     round.matches.forEach((m, mIdx)=>{
       html += `<div class="match" id="m-${rIdx}-${mIdx}">
-        ${m.time ? `<div class="match-time">${m.time}</div>` : ''}
+        ${(m.winner===null && (m.score1 || m.score2)) ? `<div class="live-badge"><span class="pulse"></span>LIVE</div>` : (m.time ? `<div class="match-time">${m.time}</div>` : '')}
         <div class="team ${teamClass(m,'team1')}">
           <span class="name">${m.team1}</span>
           <span class="score mono">${m.score1||''}</span>
